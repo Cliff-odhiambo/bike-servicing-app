@@ -1,4 +1,4 @@
-package com.example.bike_servicing_app
+package com.cliffmboha.bike_servicing_app
 
 import io.flutter.embedding.android.FlutterActivity
 

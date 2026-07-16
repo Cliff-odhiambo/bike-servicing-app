@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "302059718126",
+    "project_id": "bike-servicing-app-5f0d1",
+    "storage_bucket": "bike-servicing-app-5f0d1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302059718126:android:0221b9ab0b4d3df2eabaff",
+        "android_client_info": {
+          "package_name": "com.cliffmboha.bike_servicing_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCW6TefeHBDaPHUIKroQ8v2KmIJ3D8tAPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
