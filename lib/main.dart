@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'firebase_options.dart';
 
@@ -26,15 +27,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'CycleFix',
-      theme: AppTheme.lightTheme,
-      initialRoute: AppRoutes.login,
-      routes: {
-        AppRoutes.login: (_) => const LoginScreen(),
-        AppRoutes.register: (_) => const RegisterScreen(),
-        AppRoutes.riderHome: (_) => const RiderHomePage(),
-      },
-    );
+  debugShowCheckedModeBanner: false,
+  title: 'CycleFix',
+  theme: AppTheme.lightTheme,
+
+  home: FirebaseAuth.instance.currentUser == null
+      ? const LoginScreen()
+      : const RiderHomePage(),
+
+  routes: {
+    AppRoutes.login: (_) => const LoginScreen(),
+    AppRoutes.register: (_) => const RegisterScreen(),
+    AppRoutes.riderHome: (_) => const RiderHomePage(),
+  },
+);
   }
 }

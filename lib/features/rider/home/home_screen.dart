@@ -1,23 +1,44 @@
 import 'package:flutter/material.dart';
 
+import '../../../shared/widgets/rider_scaffold.dart';
+
+import 'widgets/greeting_section.dart';
+import 'widgets/search_section.dart';
+import 'widgets/quick_services_section.dart';
+import 'widgets/nearby_mechanics_section.dart';
+
 class RiderHomePage extends StatelessWidget {
   const RiderHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Bike Service",
-        ),
-      ),
+    return RiderScaffold(
+      currentIndex: 0,
+      title: "CycleFix",
 
-      body: const Center(
-        child: Text(
-          "Welcome Rider",
-          style: TextStyle(
-            fontSize: 24,
-          ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+
+            GreetingSection(
+              userName: "Alex",
+            ),
+
+            SizedBox(height: 24),
+
+            SearchSection(),
+
+            SizedBox(height: 32),
+
+            QuickServicesSection(),
+
+            SizedBox(height: 32),
+
+            NearbyMechanicsSection(),
+
+          ],
         ),
       ),
     );
