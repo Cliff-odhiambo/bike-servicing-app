@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
-import 'screens/splash/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'firebase_options.dart';
+
 import 'core/theme/app_theme.dart';
-import 'features/authentication/login_screen.dart';
 import 'core/routes/app_routes.dart';
+
 import 'features/authentication/login_screen.dart';
 import 'features/authentication/register_screen.dart';
+import 'features/rider/home/home_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -21,8 +31,9 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       initialRoute: AppRoutes.login,
       routes: {
-        AppRoutes.login: (context) => const LoginScreen(),
-        AppRoutes.register: (context) => const RegisterScreen(),
+        AppRoutes.login: (_) => const LoginScreen(),
+        AppRoutes.register: (_) => const RegisterScreen(),
+        AppRoutes.riderHome: (_) => const RiderHomePage(),
       },
     );
   }

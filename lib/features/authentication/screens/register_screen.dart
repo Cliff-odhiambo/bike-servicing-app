@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 
 
-import '../../core/theme/app_text_styles.dart';
-import '../../shared/widgets/app_text_field.dart';
-import '../../shared/widgets/primary_button.dart';
-import '../../core/validators/validators.dart';
-import '../../core/routes/app_routes.dart';
-import 'auth_controller.dart';
+import '../../../core/theme/app_text_styles.dart';
+import '../../../core/validators/validators.dart';
+
+import '../../../shared/widgets/app_text_field.dart';
+import '../../../shared/widgets/primary_button.dart';
+
+// Minimal AuthController placeholder to satisfy usage in this screen.
+// Replace with real implementation from your auth feature.
+
+class AuthController {
+  Future<String?> register({
+    required String fullName,
+    required String email,
+    required String phone,
+    required String password,
+    required String role,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return null;
+  }
+}
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -24,11 +39,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
+  
   final AuthController authController = AuthController();
 
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
+  
+  String selectedRole = "Rider";
 
   @override
   void dispose() {
@@ -54,45 +71,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
 }
 Future<void> register() async {
 
-  if (!(formKey.currentState?.validate() ?? false)) {
+  if (!formKey.currentState!.validate()) {
     return;
   }
 
-  try {
+  final error = await authController.register(
 
-    await authController.register(
-      fullName: nameController.text.trim(),
-      email: emailController.text.trim(),
-      phone: phoneController.text.trim(),
-      password: passwordController.text.trim(),
-      role: "customer",
+    fullName: nameController.text.trim(),
+
+    email: emailController.text.trim(),
+
+    phone: phoneController.text.trim(),
+
+    password: passwordController.text,
+
+    role: selectedRole,
+
+  );
+
+  if (!mounted) return;
+
+  if (error == null) {
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Account created successfully"),
+      ),
     );
 
-
-    if (!mounted) return;
-
-
-    
-    Navigator.pushReplacementNamed(
-      context,
-      AppRoutes.riderHome,
-    );
-
-
-  } catch (e) {
-
-    if (!mounted) return;
-
+  } else {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          e.toString(),
-        ),
+        content: Text(error),
       ),
     );
 
   }
+
 }
 
   @override
@@ -157,6 +173,53 @@ Future<void> register() async {
                   hintText: "07XXXXXXXX",
                   keyboardType: TextInputType.phone,
                   validator: Validators.phone,
+                ),
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                  const Text(
+                      "Register As",
+                    style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                const SizedBox(height: 8),
+
+                DropdownButtonFormField<String>(
+                  initialValue: selectedRole,
+
+                 decoration: const InputDecoration(),
+
+                  items: const [
+
+                 DropdownMenuItem(
+                  value: "Rider",
+                  child: Text("Rider"),
+                  ),
+
+                 DropdownMenuItem(
+                  value: "Provider",
+                  child: Text("Provider"),
+                  ),
+
+                  ],
+
+                  onChanged: (value) {
+
+                  setState(() {
+
+                    selectedRole = value!;
+
+                  });
+
+                  },
+
+                ),
+
+                ],
                 ),
 
                 const SizedBox(height: 20),
