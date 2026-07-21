@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../shared/widgets/mechanic_card.dart';
+import '../../../../core/routes/app_routes.dart';
 
 class NearbyMechanicsSection extends StatelessWidget {
   const NearbyMechanicsSection({super.key});
@@ -25,7 +26,11 @@ class NearbyMechanicsSection extends StatelessWidget {
 
             TextButton(
               onPressed: () {
-                // We'll navigate to the full mechanics list later.
+                // We'll connect this to the Search screen later.
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.search,
+                );
               },
               child: const Text("View All"),
             ),
@@ -41,12 +46,10 @@ class NearbyMechanicsSection extends StatelessWidget {
           rating: 4.8,
           distance: "1.2 km",
           onTap: () {
-ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text("Mechanic details coming soon"),
-    ),
-  );
-
+            Navigator.pushNamed(
+              context,
+              AppRoutes.mechanicDetails,
+            );
           },
         ),
 
@@ -56,11 +59,10 @@ ScaffoldMessenger.of(context).showSnackBar(
           rating: 4.7,
           distance: "2.4 km",
           onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text("Mechanic details coming soon"),
-    ),
-  );
+            Navigator.pushNamed(
+              context,
+              AppRoutes.mechanicDetails,
+            );
           },
         ),
 
@@ -70,13 +72,13 @@ ScaffoldMessenger.of(context).showSnackBar(
           rating: 4.9,
           distance: "3.1 km",
           onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text("Mechanic details coming soon"),
-    ),
-  );
+            Navigator.pushNamed(
+              context,
+              AppRoutes.mechanicDetails,
+            );
           },
         ),
+
       ],
     );
   }

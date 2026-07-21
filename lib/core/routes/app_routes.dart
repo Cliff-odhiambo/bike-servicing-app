@@ -9,6 +9,8 @@ class AppRoutes {
   static const String search = '/search';
   static const String mechanicDetails = '/mechanic-details';
   static const String requestService = '/request-service';
+  static const requestStatus = '/request-status';
+  static const String requestHistory = '/request-history';
   static const String notifications = '/notifications';
   static const String profile = '/profile';
 
