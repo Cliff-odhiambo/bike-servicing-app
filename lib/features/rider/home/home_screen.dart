@@ -7,6 +7,8 @@ import 'widgets/search_section.dart';
 import 'widgets/quick_services_section.dart';
 import 'widgets/nearby_mechanics_section.dart';
 
+import '../models/sample_rider.dart';
+
 class RiderHomePage extends StatelessWidget {
   const RiderHomePage({super.key});
 
@@ -20,24 +22,22 @@ class RiderHomePage extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-
+          children: [
             GreetingSection(
-              userName: "Alex",
+              userName: sampleRider.name,
             ),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-            SearchSection(),
+            const SearchSection(),
 
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
-            QuickServicesSection(),
+            const QuickServicesSection(),
 
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
-            NearbyMechanicsSection(),
-
+            const NearbyMechanicsSection(),
           ],
         ),
       ),

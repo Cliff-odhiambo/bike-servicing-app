@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/routes/app_routes.dart';
+
 class QuickActionsSection extends StatelessWidget {
   const QuickActionsSection({super.key});
 
@@ -8,7 +10,6 @@ class QuickActionsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         const Text(
           "Quick Actions",
           style: TextStyle(
@@ -19,20 +20,35 @@ class QuickActionsSection extends StatelessWidget {
 
         const SizedBox(height: 16),
 
-        FilledButton.icon(
-          onPressed: () {},
-          icon: const Icon(Icons.store),
-          label: const Text("Manage Shop"),
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton.icon(
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.manageShop,
+              );
+            },
+            icon: const Icon(Icons.store),
+            label: const Text("Manage Shop"),
+          ),
         ),
 
         const SizedBox(height: 12),
 
-        FilledButton.icon(
-          onPressed: () {},
-          icon: const Icon(Icons.assignment),
-          label: const Text("Incoming Requests"),
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton.icon(
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.incomingRequests,
+              );
+            },
+            icon: const Icon(Icons.assignment),
+            label: const Text("Incoming Requests"),
+          ),
         ),
-
       ],
     );
   }

@@ -23,6 +23,12 @@ import 'features/provider/registration/provider_registration_screen.dart';
 import 'features/provider/requests/incoming_requests_screen.dart';
 import 'features/provider/shop/manage_shop_screen.dart';
 
+import 'features/admin/dashboard/dashboard_screen.dart';
+import 'features/admin/users/manage_users_screen.dart';
+import 'features/admin/providers/provider_approval_screen.dart';
+import 'features/admin/requests/all_requests_screen.dart';
+import 'features/admin/reports/reports_screen.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,8 +51,8 @@ class MyApp extends StatelessWidget {
   theme: AppTheme.lightTheme,
 
   home: FirebaseAuth.instance.currentUser == null
-      ? const LoginScreen()
-      : const RiderHomePage(),
+    ? const LoginScreen()
+    : const RiderHomePage(),
 
   routes: {
     AppRoutes.login: (_) => const LoginScreen(),
@@ -64,6 +70,12 @@ class MyApp extends StatelessWidget {
     AppRoutes.providerDashboard: (_) => const ProviderDashboardScreen(),
     AppRoutes.incomingRequests: (_) => const IncomingRequestsScreen(),
     AppRoutes.manageShop: (_) => const ManageShopScreen(),
+
+    AppRoutes.adminDashboard: (_) => const AdminDashboardScreen(),
+    AppRoutes.manageUsers: (_) => const ManageUsersScreen(),
+    AppRoutes.providerApproval: (_) => const ProviderApprovalScreen(),
+    AppRoutes.allRequests: (_) => const AllRequestsScreen(),
+    AppRoutes.reports: (_) => const ReportsScreen(),
   },
 );
   }

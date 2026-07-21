@@ -14,12 +14,12 @@ class ProviderRegistrationScreen extends StatelessWidget {
         ),
       ),
 
-      body: const SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24),
-          child: ProviderForm(),
-        ),
-      ),
+      body: SafeArea(
+  child: SingleChildScrollView(
+    padding: const EdgeInsets.all(24),
+    child: const ProviderForm(),
+  ),
+),
     );
   }
 }
