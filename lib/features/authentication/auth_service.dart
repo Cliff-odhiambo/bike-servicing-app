@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-import 'user_model.dart';
 
 class AuthService {
   AuthService._();
@@ -9,47 +8,27 @@ class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static Future<UserCredential> register({
-  required String fullName,
-  required String email,
-  required String phone,
-  required String password,
-}) async {
+    required String fullName,
+    required String email,
+    required String phone,
+    required String password,
+  }) async {
+    UserCredential credential =
+        await _auth.createUserWithEmailAndPassword(
+      email: email.trim(),
+      password: password.trim(),
+    );
 
-  UserCredential credential =
-      await _auth.createUserWithEmailAndPassword(
-    email: email,
-    password: password,
-  );
-
-
-  UserModel user = UserModel(
-    uid: credential.user!.uid,
-    fullName: fullName,
-    email: email,
-    phone: phone,
-    role: "customer",
-    createdAt: DateTime.now(),
-  );
-
-
-  await FirebaseFirestore.instance
-      .collection('users')
-      .doc(user.uid)
-      .set(
-        user.toMap(),
-      );
-
-
-  return credential;
-}
+    return credential;
+  }
 
   static Future<UserCredential> login({
     required String email,
     required String password,
   }) async {
     return await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
+      email: email.trim(),
+      password: password.trim(),
     );
   }
 
@@ -57,5 +36,35 @@ class AuthService {
     await _auth.signOut();
   }
 
+  static Future<void> resetPassword({
+    required String email,
+  }) async {
+    await _auth.sendPasswordResetEmail(
+      email: email.trim(),
+    );
+  }
+
+  static Future<String?> getUserRole() async {
+  final user = _auth.currentUser;
+
+  if (user == null) {
+    return null;
+  }
+
+  final doc = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .get();
+
+  if (!doc.exists) {
+    return null;
+  }
+
+  final data = doc.data();
+
+  return data?['role'] as String?;
+}
+
   static User? get currentUser => _auth.currentUser;
+
 }

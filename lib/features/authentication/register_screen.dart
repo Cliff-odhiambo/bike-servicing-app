@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-
+import '../../core/routes/app_routes.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/validators/validators.dart';
 import '../../shared/widgets/app_text_field.dart';
 import '../../shared/widgets/primary_button.dart';
-import '../../core/validators/validators.dart';
-import '../../core/routes/app_routes.dart';
+
 import 'auth_controller.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,7 +17,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
   final formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -29,6 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -41,83 +42,90 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   String? confirmPasswordValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please confirm your password";
+    }
 
-  if (value == null || value.isEmpty) {
-    return "Please confirm your password";
+    if (value != passwordController.text) {
+      return "Passwords do not match";
+    }
+
+    return null;
   }
 
-  if (value != passwordController.text) {
-    return "Passwords do not match";
-  }
+  Future<void> register() async {
+    if (!(formKey.currentState?.validate() ?? false)) {
+      return;
+    }
 
-  return null;
-}
-Future<void> register() async {
+    setState(() {
+      isLoading = true;
+    });
 
-  if (!(formKey.currentState?.validate() ?? false)) {
-    return;
-  }
-
-  try {
-
-    await authController.register(
+    final error = await authController.register(
       fullName: nameController.text.trim(),
       email: emailController.text.trim(),
       phone: phoneController.text.trim(),
       password: passwordController.text.trim(),
-      role: "customer",
+      role: "rider",
     );
-
 
     if (!mounted) return;
 
+    setState(() {
+      isLoading = false;
+    });
 
-    
-    Navigator.pushReplacementNamed(
-      context,
-      AppRoutes.riderHome,
-    );
-
-
-  } catch (e) {
-
-    if (!mounted) return;
-
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          e.toString(),
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error),
         ),
-      ),
-    );
+      );
+      return;
+    }
 
+    final role = await authController.getUserRole();
+
+    if (!mounted) return;
+
+    switch (role) {
+      case "admin":
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.adminDashboard,
+        );
+        break;
+
+      case "provider":
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.providerDashboard,
+        );
+        break;
+
+      case "rider":
+      default:
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.riderHome,
+        );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
       appBar: AppBar(),
 
       body: SafeArea(
-
         child: SingleChildScrollView(
-
           padding: const EdgeInsets.all(24),
-
           child: Form(
-
             key: formKey,
-
             child: Column(
-
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
-
                 Text(
                   "Create Account",
                   style: AppTextStyles.heading,
@@ -208,7 +216,8 @@ Future<void> register() async {
 
                 PrimaryButton(
                   text: "Create Account",
-                  onPressed: register,
+                  isLoading: isLoading,
+                  onPressed: () => register(),
                 ),
 
                 const SizedBox(height: 25),
@@ -216,7 +225,6 @@ Future<void> register() async {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     const Text("Already have an account?"),
 
                     TextButton(
@@ -225,10 +233,8 @@ Future<void> register() async {
                       },
                       child: const Text("Log in"),
                     ),
-
                   ],
-                )
-
+                ),
               ],
             ),
           ),

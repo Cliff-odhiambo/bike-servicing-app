@@ -57,6 +57,10 @@ class AuthController {
     }
   }
 
+  Future<String?> getUserRole() async {
+    return await AuthService.getUserRole();
+  }
+
   Future<void> logout() async {
     await AuthService.logout();
   }
