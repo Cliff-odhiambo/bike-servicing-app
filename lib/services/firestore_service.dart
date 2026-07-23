@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../features/authentication/user_model.dart';
 import '../features/provider/provider_model.dart';
+import '../features/requests/request_model.dart';
+
 
 
 
@@ -31,6 +33,70 @@ class FirestoreService {
         (doc) => ProviderModel.fromMap(doc.data()),
       )
       .toList();
+}
+
+/// Save a new service request
+static Future<void> saveRequest(
+  RequestModel request,
+) async {
+  await _firestore
+      .collection('requests')
+      .doc(request.id)
+      .set(request.toMap());
+}
+
+/// Get all pending requests
+static Future<List<RequestModel>> getPendingRequests() async {
+  final snapshot = await _firestore
+      .collection('requests')
+      .where('status', isEqualTo: 'pending')
+      .get();
+
+  return snapshot.docs
+      .map(
+        (doc) => RequestModel.fromMap(doc.data()),
+      )
+      .toList();
+}
+
+/// Provider accepts a request
+static Future<void> acceptRequest(
+  String requestId,
+  String providerId,
+) async {
+  await _firestore
+      .collection('requests')
+      .doc(requestId)
+      .update({
+    'providerId': providerId,
+    'status': 'accepted',
+    'acceptedAt': DateTime.now().toIso8601String(),
+  });
+}
+
+/// Reject a request
+static Future<void> rejectRequest(
+  String requestId,
+) async {
+  await _firestore
+      .collection('requests')
+      .doc(requestId)
+      .update({
+    'status': 'rejected',
+  });
+}
+
+/// Mark request as completed
+static Future<void> completeRequest(
+  String requestId,
+) async {
+  await _firestore
+      .collection('requests')
+      .doc(requestId)
+      .update({
+    'status': 'completed',
+    'completedAt': DateTime.now().toIso8601String(),
+  });
 }
 
 static Future<void> approveProvider(String providerId) async {
@@ -91,5 +157,9 @@ static Future<void> rejectProvider(String providerId) async {
       .collection('providers')
       .doc(provider.id)
       .set(provider.toMap());
+}
+
+static Future<void> logout() async {
+  await FirebaseAuth.instance.signOut();
 }
 }

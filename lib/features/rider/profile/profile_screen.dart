@@ -130,10 +130,29 @@ class ProfileScreen extends StatelessWidget {
               ),
 
               ProfileTile(
-                icon: Icons.logout,
-                title: "Logout",
-                onTap: () {},
-              ),
+  icon: Icons.logout,
+  title: "Logout",
+  onTap: () async {
+    debugPrint("1. Logout tapped");
+
+    try {
+      await FirestoreService.logout();
+      debugPrint("2. Firebase signed out");
+
+      if (!context.mounted) return;
+
+      debugPrint("3. Navigating to login");
+
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.login,
+        (route) => false,
+      );
+    } catch (e) {
+      debugPrint("Logout error: $e");
+    }
+  },
+),
             ],
           );
         },

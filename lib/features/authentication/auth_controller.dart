@@ -39,23 +39,23 @@ class AuthController {
     }
   }
 
-  Future<String?> login({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      await AuthService.login(
-        email: email,
-        password: password,
-      );
+ Future<UserModel?> login({
+  required String email,
+  required String password,
+}) async {
+  try {
+    await AuthService.login(
+      email: email,
+      password: password,
+    );
 
-      return null;
-    } on FirebaseAuthException catch (e) {
-      return e.message;
-    } catch (e) {
-      return e.toString();
-    }
+    return await FirestoreService.getCurrentUser();
+  } on FirebaseAuthException {
+    rethrow;
+  } catch (e) {
+    throw Exception(e.toString());
   }
+}
 
   Future<String?> getUserRole() async {
     return await AuthService.getUserRole();

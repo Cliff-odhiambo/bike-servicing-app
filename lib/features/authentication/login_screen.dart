@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../core/routes/app_routes.dart';
 import '../../core/theme/app_text_styles.dart';
@@ -6,6 +7,7 @@ import '../../shared/widgets/app_text_field.dart';
 import '../../shared/widgets/primary_button.dart';
 
 import 'auth_controller.dart';
+import 'user_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,28 +37,23 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final error = await authController.login(
+      UserModel? user = await authController.login(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
-      if (error != null) {
-        if (!mounted) return;
+      if (!mounted) return;
 
+      if (user == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error),
+          const SnackBar(
+            content: Text("User profile not found."),
           ),
         );
-
         return;
       }
 
-      final role = await authController.getUserRole();
-
-      if (!mounted) return;
-
-      switch (role) {
+      switch (user.role) {
         case "admin":
           Navigator.pushReplacementNamed(
             context,
@@ -79,13 +76,23 @@ class _LoginScreenState extends State<LoginScreen> {
           );
           break;
       }
-    } catch (_) {
+    } on FirebaseAuthException catch (e) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            "Something went wrong",
+            e.message ?? "Login failed",
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
           ),
         ),
       );
@@ -161,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
               PrimaryButton(
                 text: "Log in",
                 isLoading: isLoading,
-                onPressed: () => login(),
+                onPressed: login,
               ),
 
               const SizedBox(height: 25),
