@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'request_history_screen.dart';
 
 import '../../requests/request_controller.dart';
 import '../../requests/request_model.dart';
 
-import '../../../core/routes/app_routes.dart';
+
+
+
 
 class RequestServiceScreen extends StatefulWidget {
   const RequestServiceScreen({super.key});
@@ -165,10 +168,12 @@ Future<void> submitRequest() async {
     ),
   );
 
-  Navigator.pushReplacementNamed(
-    context,
-    AppRoutes.requestStatus,
-  );
+  Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => RequestHistoryScreen(),
+  ),
+);
 }
 
   @override

@@ -40,4 +40,28 @@ class RequestController {
       requestId,
     );
   }
+
+  Future<RequestModel?> getLatestRequest(
+  String riderId,
+) async {
+  return FirestoreService.getLatestRequest(
+    riderId,
+  );
+}
+
+Future<List<RequestModel>> getRiderRequests(
+  String riderId,
+) async {
+  return FirestoreService.getRiderRequests(
+    riderId,
+  );
+}
+
+Future<RequestModel?> getRequestById(
+  String requestId,
+) async {
+  return FirestoreService.getRequestById(
+    requestId,
+  );
+}
 }

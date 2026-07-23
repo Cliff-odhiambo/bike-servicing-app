@@ -50,6 +50,7 @@ static Future<List<RequestModel>> getPendingRequests() async {
   final snapshot = await _firestore
       .collection('requests')
       .where('status', isEqualTo: 'pending')
+      .orderBy('createdAt', descending: true)
       .get();
 
   return snapshot.docs
@@ -84,6 +85,59 @@ static Future<void> rejectRequest(
       .update({
     'status': 'rejected',
   });
+}
+
+/// Get the latest request for the current rider
+static Future<RequestModel?> getLatestRequest(
+  String riderId,
+) async {
+  final snapshot = await _firestore
+      .collection('requests')
+      .where('riderId', isEqualTo: riderId)
+      .orderBy('createdAt', descending: true)
+      .limit(1)
+      .get();
+
+  if (snapshot.docs.isEmpty) {
+    return null;
+  }
+
+  return RequestModel.fromMap(
+    snapshot.docs.first.data(),
+  );
+}
+
+/// Get all requests belonging to a rider
+static Future<List<RequestModel>> getRiderRequests(
+  String riderId,
+) async {
+  final snapshot = await _firestore
+      .collection('requests')
+      .where('riderId', isEqualTo: riderId)
+      .orderBy('createdAt', descending: true)
+      .get();
+
+  return snapshot.docs
+      .map(
+        (doc) => RequestModel.fromMap(doc.data()),
+      )
+      .toList();
+}
+
+/// Get a single request by its ID
+static Future<RequestModel?> getRequestById(
+  String requestId,
+) async {
+  final doc = await _firestore
+      .collection('requests')
+      .doc(requestId)
+      .get();
+
+  if (!doc.exists) {
+    return null;
+  }
+
+  return RequestModel.fromMap(doc.data()!);
 }
 
 /// Mark request as completed
@@ -162,4 +216,6 @@ static Future<void> rejectProvider(String providerId) async {
 static Future<void> logout() async {
   await FirebaseAuth.instance.signOut();
 }
+
+
 }

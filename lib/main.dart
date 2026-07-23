@@ -16,7 +16,6 @@ import 'features/rider/notifications/notifications_screen.dart';
 import 'features/rider/profile/profile_screen.dart';
 import 'features/rider/mechanic/mechanic_details_screen.dart';
 import 'features/rider/request/request_service_screen.dart';
-import 'features/rider/request/request_status_screen.dart';
 import 'features/rider/request/request_history_screen.dart';
 import 'features/provider/dashboard/dashboard_screen.dart';
 import 'features/provider/registration/provider_registration_screen.dart';
@@ -66,11 +65,10 @@ class MyApp extends StatelessWidget {
     AppRoutes.profile: (_) => const ProfileScreen(),
     AppRoutes.mechanicDetails: (_) => const MechanicDetailsScreen(),
     AppRoutes.requestService: (_) =>  const RequestServiceScreen(),
-    AppRoutes.requestStatus: (_) => const RequestStatusScreen(),
-    AppRoutes.requestHistory: (_) => const RequestHistoryScreen(),
+    AppRoutes.requestHistory: (_) => RequestHistoryScreen(),
     AppRoutes.providerRegistration: (_) => const ProviderRegistrationScreen(),
     AppRoutes.providerDashboard: (_) => const ProviderDashboardScreen(),
-    AppRoutes.incomingRequests: (_) => const IncomingRequestsScreen(),
+    AppRoutes.incomingRequests: (_) => IncomingRequestsScreen(),
     AppRoutes.manageShop: (_) => const ManageShopScreen(),
 
     AppRoutes.adminDashboard: (_) => const AdminDashboardScreen(),
